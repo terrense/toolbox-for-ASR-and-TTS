@@ -1,4 +1,4 @@
-# HGDoctor Voice Service
+# Terrence Voice Service
 
 语音交互服务，提供自动语音识别（ASR）功能。
 
@@ -16,7 +16,7 @@ voice-service/
 │   └── services/                 # 业务逻辑层
 │       ├── voice_service.py      # 语音服务主类（ASR调度）
 │       ├── voice_interface.py    # ASR接口实现（FunASR WebSocket）
-│       ├── hg_deepseek.py        # LLM后处理（语音识别结果修正）
+│       ├── LLM_functions.py        # LLM后处理（语音识别结果修正）
 │       ├── full_hotwords.py      # 热词处理工具
 │       ├── hotwords.txt          # 热词配置文件
 │       └── models/               # 模型文件目录
