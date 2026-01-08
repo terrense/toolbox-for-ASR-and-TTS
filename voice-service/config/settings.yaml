@@ -1,0 +1,73 @@
+# HGDoctor 诊断服务配置文件
+# 配置通过 flatten_yaml 函数扁平化为环境变量
+
+app:
+  name: "HGDoctor Diagnostic Service"
+  version: "1.0.0"
+  environment: "development"
+
+diagnostic_server:
+  host: "0.0.0.0"
+  port: 8000
+
+security:
+  allowed_hosts: ["localhost", "127.0.0.1", "*.local", "host.docker.internal", "*"]
+  cors_origins: ["http://localhost:3000", "https://localhost:3000", "http://127.0.0.1:3000", "http://host.docker.internal:3000", "*"]
+
+# 经过 nginx 反向代理时，由nginx处理 SSL 证书
+ssl:
+  cert_path: "/app/certs/cert.pem"
+  key_path: "/app/certs/key.pem"
+
+paths:
+  src: "/app/src"
+  resources: "/app/resources"
+  logs: "/app/logs"
+  certs: "/app/certs"
+
+ai_model:
+  base_url: "http://172.24.27.11:5105/v1"
+  api_key: "GHVHTT9meytovgGA3eAotzAfmeSE_5CLA1NVJ0cOWPVEGWc8sw"
+  model_name: "Qwen3-32B"
+
+reranker:
+  base_url: "http://172.24.27.11:4456"
+  api_key: "GHVHTT9meytovgGA3eAotzAfmeSE_5CLA1NVJ0cOWPVEGWc8sw"
+  model_name: "Qwen3-Reranker-8B"
+  endpoint: "/v1/rerank"
+  threshold: 0.6
+
+vl_model:
+  base_url: "http://172.24.27.11:5104/v1"
+  api_key: "GHVHTT9meytovgGA3eAotzAfmeSE_5CLA1NVJ0cOWPVEGWc8sw"
+  model_name: "Qwen2.5-VL-72B-Instruct-hg"
+  chat_completion_url: "http://172.24.27.11:5104/v1/chat/completions"
+
+scanner:
+  base_url: "http://host.docker.internal:38088"
+
+openai-embedding:
+  base_url: "http://172.24.27.11:4453/v1"
+  api_key: "GHVHTT9meytovgGA3eAotzAfmeSE_5CLA1NVJ0cOWPVEGWc8sw"
+  model_name: "bge-m3-hg"
+  similarity_threshold: 0.5  # embedding 相似度阈值，0表示不过滤
+
+diagnostic_strategy:
+  normal_w_rn: 0.2
+  normal_w_rag: 0.8
+  normal_weights: [1.0, 0.8, 0.6, 0.4, 0.2]
+  normal_correcting: false  # 平诊默认开启纠错
+  emergency_w_rn: 0.6
+  emergency_w_rag: 0.4
+  emergency_weights: [1.0, 0.8, 0.6, 0.4, 0.2]
+  emergency_correcting: false  # 急诊默认关闭纠错
+  enable_llm_post_process: true  # 是否启用大模型融合后处理（审核和优化）
+
+# 异步图片处理配置（用于控制线程池与上传大小限制）
+image_processing:
+  # 后端用于图片处理的最大并发线程数（默认 4）
+  max_workers: 4
+  # 最大允许的图片字节数（单位：字节），默认 5MB
+  # 可以直接使用带单位的表示法，如 "5M" 表示 5 兆字节，"1000K" 表示 1000 千字节
+  # 字母必须大写
+  max_image_bytes: 5M

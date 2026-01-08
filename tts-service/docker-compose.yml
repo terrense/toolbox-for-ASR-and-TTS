@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  tts-service:
+    container_name: shenxin-custom-tts-service-container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: hgdoctor-tts-service:latest
+    environment:
+      # ModelScope 缓存路径
+      - MODELSCOPE_CACHE=/root/.cache/modelscope
+      # TTS 服务配置（可选，使用默认值）
+      - TTS_SAMPLING_RATE=16000
+      - TTS_BEAM_SIZE=1
+      - TTS_SEG_TARGET=18
+      - TTS_SEG_FIRST=14
+      - TTS_SEG_HARD_MAX=22
+      - TTS_CROSSFADE_MS=60
+      - TTS_PAUSE_SOFT_MS=120
+      - TTS_PAUSE_HARD_MS=200
+    ports:
+      - "19001:7001"
+    volumes:
+      # 日志目录
+      - ./logs:/app/logs
+      # 生成文件目录
+      - ./generated:/app/generated
+      # 挂载 ModelScope 缓存目录，确保模型在容器重启后仍然存在
+      # 从日志确认：模型缓存路径为 /root/.cache/modelscope
+      - ./models_cache:/root/.cache/modelscope
+    restart: unless-stopped
+    # GPU 支持（如果不需要 GPU，可以注释掉 deploy 部分）
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+

@@ -1,0 +1,68 @@
+version: 1
+disable_existing_loggers: false
+
+formatters:
+  standard:
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  detailed:
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s"
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: standard
+    stream: ext://sys.stdout
+
+  file:
+    class: logging.handlers.RotatingFileHandler
+    level: DEBUG
+    formatter: detailed
+    filename: {log_file}  # 使用占位符
+    maxBytes: 10485760
+    backupCount: 5
+    encoding: utf8
+
+  error_file:
+    class: logging.handlers.RotatingFileHandler
+    level: ERROR
+    formatter: detailed
+    filename: {error_file}  # 使用占位符
+    maxBytes: 10485760
+    backupCount: 5
+    encoding: utf8
+
+loggers:
+  {service_name}:  # 服务特定的logger
+    level: DEBUG
+    handlers: [console, file, error_file]
+    propagate: false
+
+  app:  # app包下的所有模块
+    level: DEBUG
+    handlers: [console, file, error_file]
+    propagate: false
+
+  shared.utils:  # 添加这个配置
+    level: DEBUG
+    handlers: [console, file, error_file]
+    propagate: false
+
+  uvicorn:
+    level: INFO
+    handlers: [console, file]
+    propagate: false
+
+  uvicorn.access:
+    level: INFO
+    handlers: [console, file]
+    propagate: false
+
+  uvicorn.error:
+    level: INFO
+    handlers: [console, error_file]
+    propagate: false
+
+root:
+  level: INFO
+  handlers: [console, file, error_file]

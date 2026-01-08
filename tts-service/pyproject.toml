@@ -1,0 +1,39 @@
+[tool.pyright]
+include = ["app"]
+exclude = [
+    "**/__pycache__",
+    "**/node_modules",
+    "../diagnostic-service",
+    "../voice-service",
+    "../visual-diagnosis-service"
+]
+executionEnvironments = [
+    {
+        root = "."
+        pythonVersion = "3.10"
+        pythonPlatform = "Linux"
+        extraPaths = ["."]
+    }
+]
+typeCheckingMode = "basic"
+reportMissingImports = true
+reportMissingTypeStubs = false
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tts-service"
+version = "1.0.0"
+description = "Text-to-Speech Service with async job management"
+requires-python = ">=3.10"
+
+[[tool.poetry.source]]
+name = "privated_pypi"
+url = "http://172.24.25.31:8080/simple/"
+priority = "primary"
