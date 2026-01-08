@@ -32,8 +32,8 @@ print("="*50)
 
 #====== 配置区（API_KEY） ======
 client = OpenAI(
-    base_url='http://172.24.27.11:4457/v1',
-    api_key='eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZWIwYjliZGZkNGI0NjJhOTczM2UzODAyNDM1ZWZlYyIsIm1ldGhvZHMiOiJQT1NUIiwiaWF0IjoiMTc1NDUzMTgyMiIsImV4cCI6IjE3NTQ1MzU0MjIifQ.JiNIZPgvfAFQIl0shSghYJQe1Sf_xzANTcVlFCK97EWNNp8wpXx9MSlchVAJXSyER-3_Z_0nAgN5dNGrTO8zyWUkUwJZ4qdrXLbGcANCuyOaK2UHfaRJFVhKwWYU32B1sj16dWvTzd6OQ-xUxFSH2RH4kDAyy1sYYUsgByFZELVwgZNmL6MqbRgYbtFmR8CnLQ6hutkTLfn9tlIxpahW1JJCWBXUphoECB4RfmwcmAh0Khv5F030TFcRc-UsLt7qLA-v2-34ITXZwrZkLBFAtf75_00Q9TNEyX1YHnvylKtzxVL8uwV4gITLB7zsqhf5QMGK1s1BaUNspQUh-owCVA',  # 密钥
+    base_url='find_your_own',
+    api_key='find_your_own',  # 密钥
 )
 MODEL = 'ds-v3-085'
 
